@@ -1,23 +1,24 @@
-# Basketball Scoreboard for OBS
+# 篮球比赛OBS直播比分栏
 
-FIBA 3x3 basketball scoreboard overlay for live streaming. Works directly as an OBS browser source.
+适用于各类篮球比赛转播的实时比分栏，可直接作为 OBS 浏览器源使用。
 
-## Features
+## 功能
 
-- Click left/right side of score cell to decrement/increment (+/-)
-- Double-click any text to edit inline
-- Side zones open color pickers for team colors, jersey colors, background, text
-- Tilted/skewed design for broadcast aesthetics
-- Transparent background — drop into OBS directly
+- 点击比分/犯规单元格左右侧：**±1 调整**
+- 双击任意文字：**直接编辑**
+- 左右侧边区域点击：打开**颜色选择器**（球队背景、文字、球衣颜色）
+- 标题行可修改赛事名称
+- 透明背景，直接叠加到直播画面
 
-## Usage
+## 使用方法
 
-1. Open `scoreboard.html` in a browser to preview
-2. In OBS: Add a **Browser** source, point it to `scoreboard.html`
-3. Score: click the score cell (left = minus, right = plus)
-4. Fouls: click the foul cell (left = minus, right = plus)
-5. Team names / colors: double-click to edit, or use side color pickers
+1. 下载 `scoreboard.html`，用浏览器打开预览
+2. OBS 中添加**浏览器源**，路径指向 `scoreboard.html`
+3. 左下角/右下角点击 ±1 调整分数
+4. 中间区域双击编辑球队名称
+5. 颜色选择：点击单元格侧边区域
 
-## Preview
+## 文件
 
-Open scoreboard.html directly in your browser, or add as an OBS browser source.
+- `scoreboard.html` — 比分栏全部源码（单文件，无依赖）
+- `README.md` — 本说明文件
