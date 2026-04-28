@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>FIBA 3x3 高清纯净版</title>
+    <style>
+        * { user-select: none; box-sizing: border-box; }
+        body, html { margin: 0; padding: 0; width: 100vw; height: 100vh; background: transparent; overflow: hidden; font-family: "Impact", "Microsoft YaHei", sans-serif; }
+
+        .main-wrapper {
+            position: absolute;
+            bottom: 40px;
+            left: 50px;
+            display: flex;
+            flex-direction: column;
+            transform: skewX(-8deg); 
+            transform-origin: left bottom;
+            filter: drop-shadow(4px 4px 8px rgba(0,0,0,0.5));
+        }
+
+        .row { display: flex; height: 50px; margin: 0; padding: 0; position: relative; }
+        .row-home { border-bottom: 1px solid rgba(255, 255, 255, 0.3); }
+
+        .cell {
+            position: relative;
+            display: flex;
+            border-right: 1px solid rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+        }
+        .cell:last-child { border-right: none; }
+
+        .reverse-skew {
+            transform: skewX(8deg); 
+            display: flex; width: 100%; height: 100%; align-items: center; justify-content: center;
+        }
+
+        input {
+            border: none; background: transparent; outline: none;
+            font-family: inherit; text-align: center; width: 100%;
+            pointer-events: none;
+            display: block;
+        }
+
+        /* 标题行 */
+        .title-row { background: #FFD700; height: 44px; border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .title-row input { color: #2D3436; font-size: 19px; font-weight: 900; }
+
+        /* 犯规次数：已取消加粗，确保高清不模糊 */
+        .cell-foul { width: 60px; background-color: #d63031; }
+        .cell-foul input { color: #FFFFFF; font-size: 24px; font-weight: normal; }
+
+        .cell-name { flex: 1; min-width: 150px; }
+        .cell-name input { color: #FFFFFF; font-size: 20px; font-weight: bold; font-family: "Microsoft YaHei"; }
+
+        .cell-score { width: 100px; background-color: #FFFFFF; }
+        .cell-score input { color: #1e272e; font-size: 38px; font-weight: 900; }
+
+        .cell-jersey { width: 65px; background-color: #FFFFFF; }
+        .jersey-svg { width: 34px; height: 34px; }
+
+        input.editing-active {
+            pointer-events: auto !important;
+            background: #fff !important;
+            color: #000 !important;
+            border-radius: 4px;
+        }
+
+        .picker-panel {
+            position: absolute; bottom: 55px; background: #fff;
+            padding: 8px; border-radius: 6px; display: none;
+            grid-template-columns: repeat(4, 1fr); gap: 6px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4); z-index: 1000;
+            border: 1px solid #ccc;
+            transform: skewX(8deg);
+        }
+        .color-dot { width: 26px; height: 26px; border-radius: 4px; cursor: pointer; border: 1px solid #eee; }
+
+        .zone-side { width: 35px; height: 100%; pointer-events: auto; }
+        .zone-center { flex: 1; height: 100%; pointer-events: auto; display: flex; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body>
+
+<div class="main-wrapper" id="board">
+    <div class="row title-row cell">
+        <div class="reverse-skew">
+            <div class="zone-side" title="修改背景色" onclick="openPicker(event, 'title-bg-p')"></div>
+            <div class="zone-center" ondblclick="handleDblClick(event, this)">
+                <input type="text" id="title-input" value="渑池县“奔跑吧·少年”仰韶发展杯校园三人篮球赛">
+            </div>
+            <div class="zone-side" title="修改文字色" onclick="openPicker(event, 'title-text-p')"></div>
+            <div class="picker-panel" style="left:0" id="title-bg-p"></div>
+            <div class="picker-panel" style="right:0" id="title-text-p"></div>
+        </div>
+    </div>
+
+    <div class="row row-home">
+        <div class="cell cell-jersey" onclick="openPicker(event, 'h-j-p')">
+            <div class="reverse-skew">
+                <svg class="jersey-svg" viewBox="0 0 100 100">
+                    <path id="h-j-svg" d="M30,10 C35,15 65,15 70,10 L85,25 L80,45 L75,45 L75,90 L25,90 L25,45 L20,45 L15,25 Z" fill="#bdc3c7" stroke="#000" stroke-width="3"/>
+                </svg>
+            </div>
+            <div class="picker-panel" style="left:0" id="h-j-p"></div>
+        </div>
+        <div class="cell cell-name" id="h-name-box">
+            <div class="reverse-skew">
+                <div class="zone-side" onclick="openPicker(event, 'h-n-bg-p')"></div>
+                <div class="zone-center" ondblclick="handleDblClick(event, this)">
+                    <input type="text" id="h-n-input" value="实验中学热血队">
+                </div>
+                <div class="zone-side" onclick="openPicker(event, 'h-n-text-p')"></div>
+                <div class="picker-panel" style="left:0" id="h-n-bg-p"></div>
+                <div class="picker-panel" style="right:0" id="h-n-text-p"></div>
+            </div>
+        </div>
+        <div class="cell cell-foul" onclick="handleHotZoneClick(event, 'h-foul')" ondblclick="handleDblClick(event, this)">
+            <div class="reverse-skew">
+                <input type="text" id="h-foul" value="0">
+            </div>
+        </div>
+        <div class="cell cell-score" onclick="handleHotZoneClick(event, 'h-score')" ondblclick="handleDblClick(event, this)">
+            <div class="reverse-skew">
+                <input type="text" id="h-score" value="0">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="cell cell-jersey" onclick="openPicker(event, 'a-j-p')">
+            <div class="reverse-skew">
+                <svg class="jersey-svg" viewBox="0 0 100 100">
+                    <path id="a-j-svg" d="M30,10 C35,15 65,15 70,10 L85,25 L80,45 L75,45 L75,90 L25,90 L25,45 L20,45 L15,25 Z" fill="#2980b9" stroke="#000" stroke-width="3"/>
+                </svg>
+            </div>
+            <div class="picker-panel" style="left:0" id="a-j-p"></div>
+        </div>
+        <div class="cell cell-name" id="a-name-box">
+            <div class="reverse-skew">
+                <div class="zone-side" onclick="openPicker(event, 'a-n-bg-p')"></div>
+                <div class="zone-center" ondblclick="handleDblClick(event, this)">
+                    <input type="text" id="a-n-input" value="仰韶学校飞跃队">
+                </div>
+                <div class="zone-side" onclick="openPicker(event, 'a-n-text-p')"></div>
+                <div class="picker-panel" style="left:0" id="a-n-bg-p"></div>
+                <div class="picker-panel" style="right:0" id="a-n-text-p"></div>
+            </div>
+        </div>
+        <div class="cell cell-foul" onclick="handleHotZoneClick(event, 'a-foul')" ondblclick="handleDblClick(event, this)">
+            <div class="reverse-skew">
+                <input type="text" id="a-foul" value="0">
+            </div>
+        </div>
+        <div class="cell cell-score" onclick="handleHotZoneClick(event, 'a-score')" ondblclick="handleDblClick(event, this)">
+            <div class="reverse-skew">
+                <input type="text" id="a-score" value="0">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const colorList = ['#FFFFFF','#bdc3c7','#7f8c8d','#2d3436','#d63031','#e67e22','#f1c40f','#FFD700','#2ecc71','#00b894','#0984e3','#192a56','#6c5ce7','#e84393','#00cec9','#1e272e'];
+
+    function handleHotZoneClick(e, id) {
+        e.stopPropagation();
+        const input = document.getElementById(id);
+        if (input.classList.contains('editing-active')) return;
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        let val = parseInt(input.value) || 0;
+        if (x > rect.width / 2) { val += 1; } 
+        else { val = Math.max(0, val - 1); }
+        input.value = val;
+        autoWidth(input);
+        syncRowsWidth();
+    }
+
+    function handleDblClick(e, container) {
+        e.stopPropagation();
+        const input = container.querySelector('input');
+        if (!input) return;
+        input.classList.add('editing-active');
+        input.focus();
+        input.addEventListener('blur', () => {
+            input.classList.remove('editing-active');
+            autoWidth(input); syncRowsWidth();
+        }, {once: true});
+        input.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') input.blur(); });
+    }
+
+    function isLight(color) {
+        const r = parseInt(color.substr(1, 2), 16), g = parseInt(color.substr(3, 2), 16), b = parseInt(color.substr(5, 2), 16);
+        return ((r * 299 + g * 587 + b * 114) / 1000) > 155;
+    }
+
+    function autoWidth(el) {
+        const span = document.createElement('span');
+        span.style.visibility = 'hidden'; span.style.whiteSpace = 'pre'; span.style.position = 'absolute';
+        const cs = window.getComputedStyle(el);
+        span.style.fontSize = cs.fontSize; span.style.fontWeight = cs.fontWeight;
+        span.innerText = el.value || ' ';
+        document.body.appendChild(span);
+        let offset = el.id.includes('title') ? 30 : 15;
+        el.style.width = (span.offsetWidth + offset) + 'px';
+        document.body.removeChild(span);
+    }
+
+    function syncRowsWidth() {
+        const rows = document.querySelectorAll('.row');
+        let maxW = 0;
+        rows.forEach(r => { r.style.width = 'auto'; maxW = Math.max(maxW, r.offsetWidth); });
+        rows.forEach(r => r.style.width = maxW + 'px');
+        document.getElementById('board').style.width = maxW + 'px';
+    }
+
+    function initPickers() {
+        const configs = [
+            { id: 'title-bg-p', target: 'row-title', type: 'bg' },
+            { id: 'title-text-p', target: 'title-input', type: 'text' },
+            { id: 'h-j-p', target: 'h-j-svg', type: 'svg' },
+            { id: 'a-j-p', target: 'a-j-svg', type: 'svg' },
+            { id: 'h-n-bg-p', target: 'h-name-box', type: 'bg' },
+            { id: 'h-n-text-p', target: 'h-n-input', type: 'text' },
+            { id: 'a-n-bg-p', target: 'a-name-box', type: 'bg' },
+            { id: 'a-n-text-p', target: 'a-n-input', type: 'text' }
+        ];
+        configs.forEach(conf => {
+            const p = document.getElementById(conf.id);
+            if(!p) return;
+            colorList.forEach(c => {
+                const dot = document.createElement('div');
+                dot.className = 'color-dot'; dot.style.background = c;
+                dot.onclick = (e) => {
+                    e.stopPropagation();
+                    const el = document.getElementById(conf.target);
+                    if (conf.type === 'bg') {
+                        el.style.backgroundColor = c;
+                        if (conf.target.includes('name-box')) el.querySelector('input').style.color = isLight(c) ? '#2d3436' : '#FFFFFF';
+                    } 
+                    else if (conf.type === 'text') el.style.color = c;
+                    else if (conf.type === 'svg') el.setAttribute('fill', c);
+                    p.style.display = 'none';
+                };
+                p.appendChild(dot);
+            });
+        });
+    }
+
+    function openPicker(e, id) {
+        e.stopPropagation();
+        const p = document.getElementById(id);
+        const isShow = p.style.display === 'grid';
+        document.querySelectorAll('.picker-panel').forEach(x => x.style.display = 'none');
+        p.style.display = isShow ? 'none' : 'grid';
+    }
+
+    window.onload = () => {
+        initPickers();
+        document.querySelectorAll('input').forEach(inp => autoWidth(inp));
+        syncRowsWidth();
+        document.addEventListener('click', () => document.querySelectorAll('.picker-panel').forEach(p => p.style.display = 'none'));
+    };
+</script>
+</body>
+</html>
