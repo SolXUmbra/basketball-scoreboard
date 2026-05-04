@@ -1,10 +1,166 @@
-# 篮球比赛OBS直播比分栏
+# 🏀 Basketball Scoreboard for OBS Live Streaming
+
+<p align="center">
+  <img src="https://img.shields.io/github/license/SolXUmbra/basketball-scoreboard?style=flat-square" alt="License">
+  <img src="https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square" alt="PRs Welcome">
+  <img src="https://img.shields.io/badge/OBS-Browser%20Source-blue?style=flat-square" alt="OBS Compatible">
+</p>
+
+> Real-time basketball game scoreboard overlay for OBS live streaming. Works as a browser source — no install, no dependencies.
+
+**[中文说明见下方](#篮球比赛obs直播比分栏)**
+
+---
+
+## Preview
+
+```
+┌─────────────────────────────────────────────────────┐
+│  [bg color]  FIBA 3x3 Basketball  [text color]      │  ← Title bar
+├─────────────────────────────────────────────────────┤
+│ [jersey] [Team A Name]  [Foul] [Score]             │  ← Home team
+│ [jersey] [Team B Name]  [Foul] [Score]             │  ← Away team
+└─────────────────────────────────────────────────────┘
+```
+
+Design: 8° left tilt for dynamic sports feel.
+
+## Features
+
+| Action | Effect |
+|--------|--------|
+| Click **left** of score/foul cell | -1 |
+| Click **right** of score/foul cell | +1 |
+| Double-click any text area | Edit inline |
+| Click color dot | Change color |
+| Click empty area / Press Enter | Exit edit mode |
+
+### Customizable
+
+- **Game title** — double-click to edit
+- **Team names** — double-click to rename
+- **Scores** — click ±1
+- **Foul counts** — click ±1
+- **Jersey colors** — 16-color palette
+- **Team background / text colors** — 16-color palette
+- **Title background / text colors** — 16-color palette
+
+## Quick Start
+
+### Option 1: OBS Browser Source (Recommended)
+
+1. Download `scoreboard.html` from this repo
+2. Open OBS → **Sources** → **+** → select **Browser**
+3. Configure:
+
+| Setting | Value |
+|---------|-------|
+| Local file | ✅ checked |
+| File path | path to `scoreboard.html` |
+| Width | 1920 |
+| Height | 1080 |
+| Custom CSS | `body { background: transparent; }` |
+| FPS | 30 |
+
+4. Drag to bottom-left corner (or any position)
+5. Recommended resolution: 1280×720 or 1920×1080
+
+### Option 2: Direct Browser Preview
+
+Open `scoreboard.html` in Chrome/Edge directly.
+
+### Option 3: Other Streaming Software
+
+Add OBS window capture or browser source to your streaming software.
+
+## 16-Color Palette
+
+| # | Color | Preview |
+|---|-------|---------|
+| 1 | `#FFFFFF` | ⬜ White |
+| 2 | `#bdc3c7` | ⬜ Silver |
+| 3 | `#7f8c8d` | ⬜ Gray |
+| 4 | `#2d3436` | ⬛ Charcoal |
+| 5 | `#d63031` | 🟥 Red |
+| 6 | `#e67e22` | 🟧 Orange |
+| 7 | `#f1c40f` | 🟨 Yellow |
+| 8 | `#FFD700` | 🟨 Gold |
+| 9 | `#2ecc71` | 🟩 Green |
+| 10 | `#00b894` | 🟩 Teal |
+| 11 | `#0984e3` | 🟦 Blue |
+| 12 | `#192a56` | 🟦 Navy |
+| 13 | `#6c5ce7` | 🟪 Purple |
+| 14 | `#e84393` | 🟪 Pink |
+| 15 | `#00cec9` | 🟩 Cyan |
+| 16 | `#1e272e` | ⬛ Near-black |
+
+## Keyboard Shortcuts
+
+```
+Score +1   → Click right side of score area
+Score -1   → Click left side of score area
+Foul +1    → Click right side of foul area
+Foul -1    → Click left side of foul area
+Edit text  → Double-click → type → Enter or click outside
+Change color → Click side dot → pick color → click elsewhere
+```
+
+## Use Cases
+
+- 🏀 Campus / school basketball games
+- 🏀 Corporate / community leagues
+- 🏀 3x3 basketball (FIBA 3x3)
+- 🏀 Exhibition games and training sessions
+
+## Layout
+
+```
+┌─────────────────────────────────────────────────────┐
+│  [bg]  Game Title (double-click to edit)  [text]   │
+├─────────────────────────────────────────────────────┤
+│ [jersey] [Team Name]  [Foul] [Score]               │
+│ [jersey] [Team Name]  [Foul] [Score]               │
+└─────────────────────────────────────────────────────┘
+Overall: 8° left tilt
+```
+
+## Customize Defaults
+
+Edit `scoreboard.html` to change defaults:
+
+| Item | Location in source |
+|------|---------------------|
+| Game title | `id="title-input" value="..."` |
+| Home team name | `id="h-n-input" value="..."` |
+| Away team name | `id="a-n-input" value="..."` |
+| Home score | `id="h-score" value="0"` |
+| Away score | `id="a-score" value="0"` |
+| Home fouls | `id="h-foul" value="0"` |
+| Away fouls | `id="a-foul" value="0"` |
+| Home jersey color | `fill="#..."` (SVG path) |
+| Away jersey color | `fill="#..."` (SVG path) |
+
+## Tech Specs
+
+| Item | Value |
+|------|-------|
+| File type | Single HTML file, zero dependencies |
+| Browser | Chrome, Edge, Firefox, Safari |
+| Background | Transparent |
+| Font | Impact + Microsoft YaHei (system fonts) |
+| OBS support | Browser Source ✅ |
+| File size | ~12KB |
+
+---
+
+## 🏀 篮球比赛OBS直播比分栏
 
 适用于各类篮球比赛转播的实时比分栏，可直接作为 OBS 浏览器源叠加到直播画面使用。
 
-## 功能一览
+### 功能一览
 
-### 基础操作
+#### 基础操作
+
 | 操作 | 效果 |
 |------|------|
 | 点击分数/犯规单元格**左侧** | -1 |
@@ -13,7 +169,8 @@
 | 点击颜色选择器圆点 | 更换对应颜色 |
 | 点击空白处 / 按 Enter | 退出编辑 |
 
-### 可调整内容
+#### 可调整内容
+
 - **赛事标题**：双击标题区域修改赛事名称
 - **球队名称**：双击球队名单元格，修改为自定义内容
 - **分数**：点击计分区域左右两侧 ±1
@@ -93,16 +250,15 @@
 - 🏀 企业/社区联赛直播
 - 🏀 三人篮球赛（FIBA 3x3）
 - 🏀 友谊赛、训练赛
-- 🏀 电竞赛事比分（改编配色即可）
 
 ## 布局说明
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│  [背景色]  赛事标题（双击编辑）  [文字色]            │  ← 标题行（金色）
+│  [背景色]  赛事标题（双击编辑）  [文字色]            │  ← 标题行
 ├─────────────────────────────────────────────────────┤
-│ [球衣] [球队名称（双击编辑）] [犯规] [分数]          │  ← 主队（白底黑字）
-│ [球衣] [球队名称（双击编辑）] [犯规] [分数]          │  ← 客队（白底黑字）
+│ [球衣] [球队名称（双击编辑）] [犯规] [分数]          │  ← 主队
+│ [球衣] [球队名称（双击编辑）] [犯规] [分数]          │  ← 客队
 └─────────────────────────────────────────────────────┘
 ```
 
@@ -110,7 +266,7 @@
 
 ## 自定义扩展
 
-如需修改预设内容（如默认球队名、默认比分），直接编辑 `scoreboard.html` 源码中对应的 `value` 属性即可：
+如需修改预设内容，直接编辑 `scoreboard.html` 源码中对应的 `value` 属性即可：
 
 | 位置 | 源码位置 |
 |------|----------|
@@ -121,8 +277,8 @@
 | 客队分数 | `id="a-score" value="0"` |
 | 主队犯规 | `id="h-foul" value="0"` |
 | 客队犯规 | `id="a-foul" value="0"` |
-| 主队球衣色 | `fill="#bdc3c7"` (SVG path) |
-| 客队球衣色 | `fill="#2980b9"` (SVG path) |
+| 主队球衣色 | `fill="#..."` (SVG path) |
+| 客队球衣色 | `fill="#..."` (SVG path) |
 
 ## 技术参数
 
@@ -135,10 +291,3 @@
 | 交互方式 | 鼠标点击 + 触屏 |
 | OBS 支持 | 浏览器源 ✅ |
 | 文件大小 | ~12KB（极轻量） |
-
-## 文件说明
-
-| 文件 | 说明 |
-|------|------|
-| `scoreboard.html` | 比分组完整源码（单文件） |
-| `README.md` | 本使用说明文档 |
